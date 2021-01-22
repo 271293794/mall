@@ -1,0 +1,6 @@
+node_modules/
+log/
+backend/migrations/*.js
+backend/seeders/
+uploads/
+26.json
