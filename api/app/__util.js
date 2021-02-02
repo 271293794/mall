@@ -1,6 +1,6 @@
 module.exports = {
     // 如果有一条数据的父节点是死数据呢？
-    withChildren: function (list = [], { rootId = 0, id = 'id', pId = 'parentId', child = 'children' }) {
+    withChildren(list = [], { rootId = 0, id = 'id', pId = 'parentId', child = 'children' }) {
         for (let isAlllayer1 = false; !isAlllayer1; isAlllayer1 = !isAlllayer1) {
             list = list.filter(tempNode => {
                 let isLast = true;

@@ -6,5 +6,6 @@ module.exports = [
     '/app/sku/**',
     '/app/coupon/**',
     '/app/memberAddress/**',
+    '/app/couponHistory/**',
 
 ]

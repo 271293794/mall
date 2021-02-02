@@ -247,6 +247,15 @@ module.exports = class Base {
             throw e;
         });
     }
+    /**
+     * 更新一个对象
+     * @param {*} data 
+     * @param {*} uniqueKey 唯一值的字段名，默认为主键
+     */
+    updateByPk(data, uniqueKey) {
+        uniqueKey = uniqueKey || this.anyModel.primaryKeyAttribute;
+        return this.update(data, { where: { [uniqueKey]: data[uniqueKey] } })
+    }
 
     /**
      * 批量更新(原生update更新的内容相同，本方法不同)

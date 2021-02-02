@@ -1,5 +1,51 @@
 define({ "api": [
   {
+    "type": "post",
+    "url": "/app/couponHistory/obtain/:id",
+    "title": "领取优惠券",
+    "group": "couponHistory",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>优惠券id</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "api/app/couponHistory.js",
+    "groupTitle": "couponHistory",
+    "name": "PostAppCouponhistoryObtainId",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "string",
+            "optional": false,
+            "field": "Auth",
+            "defaultValue": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTAsInVzZXJUeXBlIjoibWVtYmVyIiwibWVtYmVyTGV2ZWxJZCI6NH0.0467ef8ab70eb6b53f2d74db1677ae14",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "返回示例",
+          "content": "HTTP/1.1 200 OK\n{\n  \"errno\" :0\n  \"message\": \"操作成功\"\n  \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
     "type": "get",
     "url": "/app/memberAddress/defaultAddress",
     "title": "默认地址",

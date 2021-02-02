@@ -7,11 +7,11 @@ module.exports = function (user, req, type) {
             // 能不能把session的id放里面？
             id: user.id,
             username: user.username,
-            nick_name: user.nickName,
+            nickName: user.nickName,
             email: user.email,
             ip: req.ip,
             hostname: req.hostname,
-            login_time: Date.now(),
+            loginTime: Date.now(),
             userType: userType.admin,
             roles: user.ums_admin_role_relation.map(obj => obj.roleId),
 
@@ -21,6 +21,8 @@ module.exports = function (user, req, type) {
             id: user.id,
             userType: userType.member,
             memberLevelId: user.memberLevelId,
+            username: user.username,
+            nickName: user.nickname,
         })
 
 
