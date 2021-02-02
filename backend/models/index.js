@@ -1,4 +1,3 @@
-'use strict';
 const Sequelize = require('sequelize');
 const cls = require('continuation-local-storage');
 const namespace = cls.createNamespace('mall-admin-namespace');
@@ -10,7 +9,7 @@ Sequelize.useCLS(namespace);
 let sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 sequelize.authenticate().then(_ => console.log('连接成功'))
-  .catch(err => console.error(`连接失败！\r\n地址：${config.host}\r\n数据库：${config.database}\r\n`, err));
+  .catch(err => console.error(`地址：${config.host}\r\n数据库：${config.database}\r\n`, err));
 
 var db = require('./init-models')(sequelize)
 
