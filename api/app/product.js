@@ -3,7 +3,7 @@ var router = require('express').Router()
     , Op = require('../../backend/models').Op
     ;
 
-let { app_product } = app;
+let { pms_product } = app;
 // 商品列表
 router.get('/list', async (req, res) => {
 
@@ -16,21 +16,21 @@ router.get('/list', async (req, res) => {
 
 
 
-    res.sucess(await app_product().findPage({ where }, { pageNum, pageSize, sortType, sortField }))
+    res.sucess(await pms_product().findPage({ where }, { pageNum, pageSize, sortType, sortField }))
 
 
 })
 // 无满减等促销信息
 router.get('/one/:id', async (req, res) => {
-    res.sucess(await app_product().findByPk(req.params.id));
+    res.sucess(await pms_product().findByPk(req.params.id));
 })
 // 返回附加了促销信息的一个产品
 router.get('/oneAndsales/:id', async (req, res) => {
     var { id } = req.params;
 
     let [product, info] = await Promise.all([
-        app_product().findByPk(id),
-        app_product().additionalInfo(id)])
+        pms_product().findByPk(id),
+        pms_product().additionalInfo(id)])
 
 
 

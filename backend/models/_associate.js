@@ -33,6 +33,9 @@ module.exports = function (db) {
 
     db.sms_coupon.hasMany(db.sms_coupon_history, { as: 'history', foreignKey: 'couponId' })
 
+    // 优惠券领取记录表关联优惠券表。外键
+    db.sms_coupon_history.belongsTo(db.sms_coupon, { as: 'coupon', foreignKey: 'couponId' })
+
 
 
 

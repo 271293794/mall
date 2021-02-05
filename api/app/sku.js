@@ -14,7 +14,7 @@ router.get('/list/:productId', async (req, res) => {
     let where = { productId: req.params.productId };
     var { keyword } = req.query;
     if (keyword) where.skuCode = { [Op.like]: `%${keyword.trim()}%` }
-    var list = await app.app_sku_stock().findList({ where })
+    var list = await app.pms_sku_stock().findList({ where })
 
     res.sucess(list)
 

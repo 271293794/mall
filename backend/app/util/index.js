@@ -1,5 +1,5 @@
 var amqp = require('amqplib');
-var { app_coupon_history } = require('../index');
+var { sms_coupon_history } = require('../index');
 var { coupon: { dieQ, ttlQ, ttl, ex, key } } = require('../../config/rabbit')
 module.exports = {
     // 如果有一条数据的父节点是死数据呢？
@@ -65,7 +65,7 @@ module.exports = {
         // 优惠券过期队列的消费者
         ch.consume(dieQ, msg => {
             let couponId = + msg.content.toString();
-            app_coupon_history().setExpired(couponId)
+            sms_coupon_history().setExpired(couponId)
 
 
         }, { noAck: true });

@@ -4,7 +4,7 @@ var router = require('express').Router()
     , { provider, operator } = require('../../backend/operatorUtils')
     , { weixin, userType } = require('../../backend/config')
     ;
-let { app_member, app_member_login_log } = app
+let { ums_member, ums_member_login_log } = app
 
 
 
@@ -17,7 +17,7 @@ router.get('/login', async (req, res) => {
     })
     if (wxRes.data.errcode) return res.err(wxRes.data);
 
-    let member = await app_member().checkInsert({ wxOpenid: wxRes.data.openid }, {
+    let member = await ums_member().checkInsert({ wxOpenid: wxRes.data.openid }, {
         wxOpenid: wxRes.data.openid,
         nickname: nickName,
         createTime: new Date,
@@ -29,7 +29,7 @@ router.get('/login', async (req, res) => {
     });
     let memberOperator = operator(member, req, userType.member);
     var tokenStr = provider.getTokenStr(memberOperator);
-    app_member_login_log().insert({
+    ums_member_login_log().insert({
         memberId: member.id,
         createTime: new Date,
         ip: req.ip,

@@ -5,11 +5,11 @@ var pms_brand = require('../../backend/app/pms_brand')
     ;
 var { Op } = db.Sequelize
 let appMap = new Map([
-    ['brand', app.app_home_brand],
-    ['newProduct', app.app_home_new_product],
-    ['recommendProduct', app.app_home_recommend_product],
-    ['recommendSubject', app.app_home_recommend_subject],
-    ['advertise', app.app_home_advertise],
+    ['brand', app.sms_home_brand],
+    ['newProduct', app.sms_home_new_product],
+    ['recommendProduct', app.sms_home_recommend_product],
+    ['recommendSubject', app.sms_home_recommend_subject],
+    ['advertise', app.sms_home_advertise],
 ])
 router.get(/(brand|newProduct|recommendProduct|recommendSubject|advertise)\/list/, async (req, res) => {
     var { pageNum, pageSize, brandName, productName, subjectName, recommendStatus, name, type, endTime } = req.query;
@@ -70,26 +70,26 @@ router.post(/(brand|newProduct|recommendProduct|recommendSubject)\/create/, asyn
 // 添加轮播广告
 router.post('/advertise/create', async (req, res) => {
 
-    res.sucess(await app.app_home_advertise().insert(req.body))
+    res.sucess(await app.sms_home_advertise().insert(req.body))
 
 })
 
 router.get('/advertise/:id', async (req, res) => {
     let { id } = req.params;
-    res.sucess(await app.app_home_advertise().findByPk(id))
+    res.sucess(await app.sms_home_advertise().findByPk(id))
 
 })
 // 更新某个轮播广告
 router.post('/advertise/update/:id', async (req, res) => {
     let { id } = req.params;
-    res.sucess(await app.app_home_advertise().update(req.body, { where: { id } }));
+    res.sucess(await app.sms_home_advertise().update(req.body, { where: { id } }));
 
 })
 // 广告轮播上线或下线
 router.post('/advertise/update/status/:id', async (req, res) => {
     let { id } = req.params;
     let { status } = req.query;
-    res.sucess(await app.app_home_advertise().update({ status }, { where: { id } }));
+    res.sucess(await app.sms_home_advertise().update({ status }, { where: { id } }));
 
 })
 

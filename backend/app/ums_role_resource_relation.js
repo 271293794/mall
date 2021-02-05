@@ -2,12 +2,12 @@
 
 var db = require('../models')
     , Base = require('./Base')
-    // , app_resource = require('./ums_resource').getInstance()
+    // , ums_resource = require('./ums_resource').getInstance()
     , { Op } = db
     , { member } = require('../config').userType
     , memberApi = require('../config/memberApi')
     ;
-var { app_resource } = require('./index')
+var { ums_resource } = require('./index')
 
 module.exports = class ums_role_resource_relation extends Base {
 
@@ -48,7 +48,7 @@ module.exports = class ums_role_resource_relation extends Base {
             // 有权的资源的id
             var resource_ids = relationList.map(obj => obj.resourceId)
             // 有权的资源，为ant路径风格
-            var resourceList = await app_resource().findList({ where: { id: { [Op.in]: resource_ids } } })
+            var resourceList = await ums_resource().findList({ where: { id: { [Op.in]: resource_ids } } })
 
             for (let i = 0; i < resourceList.length; i++) {
                 const item = resourceList[i];

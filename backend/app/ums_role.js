@@ -2,15 +2,15 @@
 
 var db = require('../models')
     , Base = require('./Base')
-    // , app_admin_role_relation = require('./ums_admin_role_relation').getInstance()
-    // , app_role_menu_relation = require('./ums_role_menu_relation').getInstance()
-    // , app_role_permission_relation = require('./ums_role_permission_relation').getInstance()
-    // , app_role_resource_relation = require('./ums_role_resource_relation').getInstance()
+    // , ums_admin_role_relation = require('./ums_admin_role_relation').getInstance()
+    // , ums_role_menu_relation = require('./ums_role_menu_relation').getInstance()
+    // , ums_role_permission_relation = require('./ums_role_permission_relation').getInstance()
+    // , ums_role_resource_relation = require('./ums_role_resource_relation').getInstance()
     ;
-var { app_admin_role_relation
-    , app_role_menu_relation
-    , app_role_permission_relation
-    , app_role_resource_relation } = require('./index')
+var { ums_admin_role_relation
+    , ums_role_menu_relation
+    , ums_role_permission_relation
+    , ums_role_resource_relation } = require('./index')
 
 
 
@@ -41,10 +41,10 @@ module.exports = class ums_role extends Base {
         let taskLs = [];
 
         [
-            app_admin_role_relation(),
-            app_role_menu_relation(),
-            app_role_permission_relation(),
-            app_role_resource_relation()
+            ums_admin_role_relation(),
+            ums_role_menu_relation(),
+            ums_role_permission_relation(),
+            ums_role_resource_relation()
         ].forEach(_ => {
             taskLs.push(_.destroy({ where: { roleId: id } }))
         })

@@ -2,10 +2,10 @@
 
 var Base = require('./Base')
     , db = require('../models');
-var { app_coupon_product_category_relation
-    , app_coupon_product_relation
-    , app_product
-    , app_coupon_history } = require('./');
+var { sms_coupon_product_category_relation
+    , sms_coupon_product_relation
+    , pms_product
+    , sms_coupon_history } = require('./');
 
 
 module.exports = class sms_coupon extends Base {
@@ -28,8 +28,8 @@ module.exports = class sms_coupon extends Base {
             await Promise.all([
                 this.update(coupon, { where: { id: coupon.id } }),
                 // 删除引用
-                app_coupon_product_category_relation().destroy({ where: { couponId: coupon.id } }),
-                app_coupon_product_relation().destroy({ where: { couponId: coupon.id } })
+                sms_coupon_product_category_relation().destroy({ where: { couponId: coupon.id } }),
+                sms_coupon_product_relation().destroy({ where: { couponId: coupon.id } })
             ])
 
         } else {
@@ -42,13 +42,13 @@ module.exports = class sms_coupon extends Base {
         // 指定商品分类适用
         if (coupon.useType == 1) {
             productCategoryRelationList.forEach(_ => _.couponId = coupon.id);
-            return app_coupon_product_category_relation().bulkCreate(productCategoryRelationList)
+            return sms_coupon_product_category_relation().bulkCreate(productCategoryRelationList)
 
         }
         // 指定商品适用
         if (coupon.useType == 2) {
             productRelationList.forEach(_ => _.couponId = coupon.id);
-            return app_coupon_product_relation().bulkCreate(productRelationList)
+            return sms_coupon_product_relation().bulkCreate(productRelationList)
 
 
         }
@@ -61,12 +61,12 @@ module.exports = class sms_coupon extends Base {
     async findAndRelation({ id }) {
         let coupon = await this.findByPk(id);
         if (coupon.useType == 1) {
-            let relationLs = await app_coupon_product_category_relation().findList({ where: { couponId: coupon.id } });
+            let relationLs = await sms_coupon_product_category_relation().findList({ where: { couponId: coupon.id } });
             coupon.productCategoryRelationList = relationLs
 
         }
         if (coupon.useType == 2) {
-            let relationLs = await app_coupon_product_relation().findList({ where: { couponId: coupon.id } });
+            let relationLs = await sms_coupon_product_relation().findList({ where: { couponId: coupon.id } });
             coupon.productRelationList = relationLs
 
         }
@@ -82,10 +82,10 @@ module.exports = class sms_coupon extends Base {
 
         return Promise.all([
             // 删除引用
-            app_coupon_product_category_relation().destroy({ where: { couponId: id } }),
-            app_coupon_product_relation().destroy({ where: { couponId: id } }),
+            sms_coupon_product_category_relation().destroy({ where: { couponId: id } }),
+            sms_coupon_product_relation().destroy({ where: { couponId: id } }),
             // 删除领取记录
-            app_coupon_history().destroy({ where: { couponId: id } }),
+            sms_coupon_history().destroy({ where: { couponId: id } }),
             // 删除本身
             this.destroy({ where: { id } })])
 
@@ -95,7 +95,7 @@ module.exports = class sms_coupon extends Base {
      * @param {Number} productId 商品id
      */
     async listByProduct(productId) {
-        let product = await app_product().findByPk(productId), now = new Date();
+        let product = await pms_product().findByPk(productId), now = new Date();
         // 现在还有效的券，基本条件
         let basicWhere = {
             // 已领取数量
@@ -112,13 +112,13 @@ module.exports = class sms_coupon extends Base {
         }];
         let [productRelationLs, categoryRelationLs, couponLs] = await Promise.all([
             // 指定商品
-            app_coupon_product_relation().findList({
+            sms_coupon_product_relation().findList({
                 raw: false,
                 where: { productId },
                 include
             }),
             // 指定分类；
-            app_coupon_product_category_relation().findList({
+            sms_coupon_product_category_relation().findList({
                 raw: false,
                 where: { productCategoryId: product.productCategoryId },
                 include
@@ -151,9 +151,9 @@ module.exports = class sms_coupon extends Base {
         };
         let [productRelationLs, categoryRelationLs] = await Promise.all([
             // 指定商品
-            app_coupon_product_relation().findList({ where: { productId }, attributes: ['couponId'] }),
+            sms_coupon_product_relation().findList({ where: { productId }, attributes: ['couponId'] }),
             // 指定分类
-            app_coupon_product_category_relation().findList({ where: { productCategoryId }, attributes: ['couponId'] }),
+            sms_coupon_product_category_relation().findList({ where: { productCategoryId }, attributes: ['couponId'] }),
         ]);
 
         let couponIdLs = [...productRelationLs.map(_ => _.couponId), ...categoryRelationLs.map(_ => _.couponId)];
@@ -190,6 +190,6 @@ module.exports = class sms_coupon extends Base {
      * @param {*} memberId 用户id
      */
     async historyCount(coupon, memberId) {
-        return app_coupon_history().count({ where: { memberId, couponId: coupon.id } })
+        return sms_coupon_history().count({ where: { memberId, couponId: coupon.id } })
     }
 }

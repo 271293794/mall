@@ -1,7 +1,7 @@
 const { apiStatus: { API_ACCESS_DENIED, NOT_LOGIN, ERR, OK }
     , log, checkApi } = require('../backend/config')
 const { getOperator } = require('../backend/operatorUtils/provider')
-const { app_role_resource_relation } = require('../backend/app')
+const { ums_role_resource_relation } = require('../backend/app')
 
 
 
@@ -24,7 +24,7 @@ module.exports = {
     apiResourceCheck: (enable = true) => async (req, res, next) => {
 
         if (!enable) return next();
-        let accept = await app_role_resource_relation().resourceCheck(req.operator, req.path)
+        let accept = await ums_role_resource_relation().resourceCheck(req.operator, req.path)
         if (!accept) return res.err(API_ACCESS_DENIED)
 
         next()

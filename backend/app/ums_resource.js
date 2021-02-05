@@ -2,7 +2,7 @@
 
 var { Op } = require('../models')
     , Base = require('./Base')
-    , { app_role_resource_relation } = require('./index')
+    , { ums_role_resource_relation } = require('./index')
     ;
 
 module.exports = class ums_resource extends Base {
@@ -20,7 +20,7 @@ module.exports = class ums_resource extends Base {
      */
     async delAndDelRelation({ id }) {
         return Promise.all([
-            app_role_resource_relation().destroy({ where: { resourceId: id } }),
+            ums_role_resource_relation().destroy({ where: { resourceId: id } }),
             this.destroy({ where: { id } })])
     }
 
@@ -29,7 +29,7 @@ module.exports = class ums_resource extends Base {
      * @param {*} param0 
      */
     async resourceLsByRole({ roleId }) {
-        let relationLs = await app_role_resource_relation().findList({ where: { roleId } })
+        let relationLs = await ums_role_resource_relation().findList({ where: { roleId } })
         return this.findList({ where: { id: { [Op.in]: relationLs.map(_ => _.resourceId) } } })
     }
 }

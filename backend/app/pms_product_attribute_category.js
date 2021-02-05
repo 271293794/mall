@@ -3,7 +3,7 @@
 var db = require('../models'),
     Base = require('./Base');
 
-var { app_product_attribute } = require('./')
+var { pms_product_attribute } = require('./')
 
 module.exports = class pms_product_attribute_category extends Base {
     constructor() {
@@ -33,9 +33,9 @@ module.exports = class pms_product_attribute_category extends Base {
      */
     async delAndDelAttribute({ id }) {
         // 找到此类别下的所有属性
-        let attributeLs = await app_product_attribute().findList({ where: { productAttributeCategoryId: id }, attributes: ['id'] })
+        let attributeLs = await pms_product_attribute().findList({ where: { productAttributeCategoryId: id }, attributes: ['id'] })
         let taskLs = [];
-        attributeLs.forEach(_ => taskLs.push(app_product_attribute().delAndDelRelationAndCount(_.id)))
+        attributeLs.forEach(_ => taskLs.push(pms_product_attribute().delAndDelRelationAndCount(_.id)))
         await Promise.all(taskLs)
         return this.destroy({ where: { id } })
 

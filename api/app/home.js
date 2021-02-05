@@ -4,9 +4,9 @@ var router = require('express').Router()
     ;
 
 let appMap = new Map([
-    ['newProduct', app.app_home_new_product],
-    ['recommendProduct', app.app_home_recommend_product],
-    ['recommendSubject', app.app_home_recommend_subject],
+    ['newProduct', app.sms_home_new_product],
+    ['recommendProduct', app.sms_home_recommend_product],
+    ['recommendSubject', app.sms_home_recommend_subject],
 ])
 // 新品推荐、人气推荐
 router.get(/(newProduct|recommendProduct|recommendSubject)\/list/, async (req, res) => {

@@ -2,9 +2,9 @@
 
 var db = require('../models')
     , Base = require('./Base')
-// , app_role_menu_relation = require('./ums_role_menu_relation').getInstance()
+// , ums_role_menu_relation = require('./ums_role_menu_relation').getInstance()
 var { Op } = db.Sequelize
-var { app_role_menu_relation } = require('./index')
+var { ums_role_menu_relation } = require('./index')
 module.exports = class ums_menu extends Base {
 
     constructor() {
@@ -16,7 +16,7 @@ module.exports = class ums_menu extends Base {
         return this.instance;
     }
     async getMenu(operator) {
-        var relationList = await app_role_menu_relation().findList({
+        var relationList = await ums_role_menu_relation().findList({
             attributes: ['menuId'],
             where: { roleId: { [Op.in]: operator.roles } }
         })
@@ -33,7 +33,7 @@ module.exports = class ums_menu extends Base {
     async delAndDelRelation({ menuId }) {
 
         return Promise.all([
-            app_role_menu_relation().destroy({ where: { menuId } }),
+            ums_role_menu_relation().destroy({ where: { menuId } }),
             this.destroy({ where: { id: menuId } })
 
         ])

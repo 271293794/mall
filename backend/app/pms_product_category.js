@@ -3,7 +3,7 @@
 var { Op } = require('../models')
     , Base = require('./Base')
     ;
-let { app_member_product_category_relation, app_coupon_product_category_relation } = require('./')
+let { ums_member_product_category_relation, sms_coupon_product_category_relation } = require('./')
 
 module.exports = class pms_product_category extends Base {
     constructor() {
@@ -74,8 +74,8 @@ module.exports = class pms_product_category extends Base {
         // 删除优惠券对此类别的引用
         // 删除
         return Promise.all([
-            app_member_product_category_relation().destroy({ where: { productCategoryId: id } }),
-            app_coupon_product_category_relation().destroy({ where: { productCategoryId: id } }),
+            ums_member_product_category_relation().destroy({ where: { productCategoryId: id } }),
+            sms_coupon_product_category_relation().destroy({ where: { productCategoryId: id } }),
             this.destroy({ where: { id } })
 
         ])

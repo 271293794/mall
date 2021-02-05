@@ -5,7 +5,7 @@ var db = require('../models')
     , { userPwdEncrypt } = require('../config')
     , CryptoJS = require('crypto-js')
     , cryptoJS = require('crypto-js')
-    , { app_admin_role_relation } = require('./index')
+    , { ums_admin_role_relation } = require('./index')
     , { userPwdEncrypt: { salt, alg, usernameMinLength: uMinLen, passwordMinLength: pMinLen } } = require('../config')
     ;
 
@@ -79,7 +79,7 @@ module.exports = class ums_admin extends Base {
     async delAndDelRelation({ id }) {
         // 是否要删除登陆日志？
         return Promise.all([
-            app_admin_role_relation().destroy({ where: { roleId: id } }),
+            ums_admin_role_relation().destroy({ where: { roleId: id } }),
             this.destroy({ where: { id } })
         ])
     }

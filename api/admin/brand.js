@@ -4,11 +4,11 @@ var router = require('express').Router()
     ;
 
 
-let { app_brand } = app
+let { pms_brand } = app
 
 router.get('/list', async (req, res) => {
     var { pageNum, pageSize } = req.query
-    var pageData = await app_brand().findPage({}, { pageNum, pageSize })
+    var pageData = await pms_brand().findPage({}, { pageNum, pageSize })
     res.sucess(pageData)
 
 })

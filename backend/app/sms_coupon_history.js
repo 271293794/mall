@@ -2,7 +2,7 @@
 
 var db = require('../models'),
     Base = require('./Base'),
-    { app_coupon } = require('../app'),
+    { sms_coupon } = require('../app'),
     util = require('./util');
 
 module.exports = class sms_coupon_history extends Base {
@@ -28,7 +28,7 @@ module.exports = class sms_coupon_history extends Base {
      */
     async obtain(couponId, memberId) {
 
-        let coupon = await app_coupon().findByPk(couponId);
+        let coupon = await sms_coupon().findByPk(couponId);
         let now = new Date(); if (!coupon) return false;
         if (coupon.receiveCount > coupon.publishCount || now < coupon.startTime || now > coupon.endTime) return false;
         // 已拥有的数量
@@ -47,12 +47,27 @@ module.exports = class sms_coupon_history extends Base {
                 useStatus: 0
 
             }),
-            app_coupon().updateByPk({
+            sms_coupon().updateByPk({
                 id: couponId,
                 receiveCount: ++coupon.receiveCount
             })]);
         util.couponTtlProducer(result[0].id)
         return true;
+
+
+    }
+    /**
+     * 查找某用户所有可用的(未使用的)优惠券
+     * @param {*} memberId 
+     */
+    async usable(memberId) {
+
+        return this.findList({
+            raw: false,
+            where: { memberId, useStatus: 0 },
+            include: [{ model: db.sms_coupon, as: 'coupon' }]
+
+        })
 
 
     }

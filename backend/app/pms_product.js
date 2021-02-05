@@ -3,13 +3,13 @@ var db = require('../models')
     , Base = require('./Base')
     ;
 
-var { app_member_price
-    , app_product_attribute_value
-    , app_product_full_reduction
-    , app_product_ladder
-    , app_subject_product_relation
-    , app_sku_stock
-    , app_prefrence_area_product_relation } = require('./index');
+var { pms_member_price
+    , pms_product_attribute_value
+    , pms_product_full_reduction
+    , pms_product_ladder
+    , cms_subject_product_relation
+    , pms_sku_stock
+    , cms_prefrence_area_product_relation } = require('./index');
 
 module.exports = class pms_product extends Base {
 
@@ -34,14 +34,14 @@ module.exports = class pms_product extends Base {
 
 
         let result = await Promise.all([
-            app_member_price()[method]({ where: { productId } }),
-            app_product_attribute_value()[method]({ where: { productId } }),
-            app_product_full_reduction()[method]({ where: { productId } }),
-            app_product_ladder()[method]({ where: { productId } }),
-            app_subject_product_relation()[method]({ where: { productId } }),
+            pms_member_price()[method]({ where: { productId } }),
+            pms_product_attribute_value()[method]({ where: { productId } }),
+            pms_product_full_reduction()[method]({ where: { productId } }),
+            pms_product_ladder()[method]({ where: { productId } }),
+            cms_subject_product_relation()[method]({ where: { productId } }),
             // 只是sku不能直接删除，要看有没有id，有id就更新，不用判断其它
-            app_sku_stock()[method]({ where: { productId } }),
-            app_prefrence_area_product_relation()[method]({ where: { productId } })])
+            pms_sku_stock()[method]({ where: { productId } }),
+            cms_prefrence_area_product_relation()[method]({ where: { productId } })])
 
 
         let [memberPriceList,
@@ -65,13 +65,13 @@ module.exports = class pms_product extends Base {
 
 
             return Promise.all([
-                app_member_price().bulkCreate(info.memberPriceList),
-                app_product_attribute_value().bulkCreate(info.productAttributeValueList),
-                app_product_full_reduction().bulkCreate(info.productFullReductionList),
-                app_product_ladder().bulkCreate(info.productLadderList),
-                app_subject_product_relation().bulkCreate(info.subjectProductRelationList),
-                app_sku_stock().bulkCreate(info.skuStockList),
-                app_prefrence_area_product_relation().bulkCreate(info.prefrenceAreaProductRelationList)
+                pms_member_price().bulkCreate(info.memberPriceList),
+                pms_product_attribute_value().bulkCreate(info.productAttributeValueList),
+                pms_product_full_reduction().bulkCreate(info.productFullReductionList),
+                pms_product_ladder().bulkCreate(info.productLadderList),
+                cms_subject_product_relation().bulkCreate(info.subjectProductRelationList),
+                pms_sku_stock().bulkCreate(info.skuStockList),
+                cms_prefrence_area_product_relation().bulkCreate(info.prefrenceAreaProductRelationList)
 
 
             ])
@@ -105,13 +105,13 @@ module.exports = class pms_product extends Base {
     async sku_sales_info(product) {
         // 促销类型：0->没有促销使用原价;1->使用促销价；2->使用会员价；3->使用阶梯价格；4->使用满减价格；5->限时购
         let resultLs = await Promise.all([
-            product.promotionType == 2 ? app_member_price().findList({ where: { productId: product.id } }) : [],
-            product.promotionType == 3 ? app_product_ladder().findList({ where: { productId: product.id } }) : [],
-            product.promotionType == 4 ? app_product_full_reduction().findList({ where: { productId: product.id } }) : [],
-            app_product_attribute_value().findList({ where: { productId: product.id } }),
-            app_subject_product_relation().findList({ where: { productId: product.id } }),
-            app_sku_stock().findList({ where: { productId: product.id } }),
-            app_prefrence_area_product_relation().findList({ where: { productId: product.id } })]);
+            product.promotionType == 2 ? pms_member_price().findList({ where: { productId: product.id } }) : [],
+            product.promotionType == 3 ? pms_product_ladder().findList({ where: { productId: product.id } }) : [],
+            product.promotionType == 4 ? pms_product_full_reduction().findList({ where: { productId: product.id } }) : [],
+            pms_product_attribute_value().findList({ where: { productId: product.id } }),
+            cms_subject_product_relation().findList({ where: { productId: product.id } }),
+            pms_sku_stock().findList({ where: { productId: product.id } }),
+            cms_prefrence_area_product_relation().findList({ where: { productId: product.id } })]);
 
         let [memberPriceList,
             productLadderList,
@@ -153,23 +153,23 @@ module.exports = class pms_product extends Base {
 
 
         let result = await Promise.all([
-            app_member_price().destroy({ where: { productId } }),
-            app_product_attribute_value().destroy({ where: { productId } }),
-            app_product_full_reduction().destroy({ where: { productId } }),
-            app_product_ladder().destroy({ where: { productId } }),
-            app_subject_product_relation().destroy({ where: { productId } }),
+            pms_member_price().destroy({ where: { productId } }),
+            pms_product_attribute_value().destroy({ where: { productId } }),
+            pms_product_full_reduction().destroy({ where: { productId } }),
+            pms_product_ladder().destroy({ where: { productId } }),
+            cms_subject_product_relation().destroy({ where: { productId } }),
             // 只是sku不能直接删除，要看有没有id，有id就更新，不用判断其它
-            hasId || app_sku_stock().destroy({ where: { productId } }),
-            app_prefrence_area_product_relation().destroy({ where: { productId } })]);
+            hasId || pms_sku_stock().destroy({ where: { productId } }),
+            cms_prefrence_area_product_relation().destroy({ where: { productId } })]);
 
         return Promise.all([
-            app_member_price().bulkCreate(info.memberPriceList),
-            app_product_attribute_value().bulkCreate(info.productAttributeValueList),
-            app_product_full_reduction().bulkCreate(info.productFullReductionList),
-            app_product_ladder().bulkCreate(info.productLadderList),
-            app_subject_product_relation().bulkCreate(info.subjectProductRelationList),
-            app_sku_stock()[hasId ? 'updateList' : 'bulkCreate'](info.skuStockList),
-            app_prefrence_area_product_relation().bulkCreate(info.prefrenceAreaProductRelationList)])
+            pms_member_price().bulkCreate(info.memberPriceList),
+            pms_product_attribute_value().bulkCreate(info.productAttributeValueList),
+            pms_product_full_reduction().bulkCreate(info.productFullReductionList),
+            pms_product_ladder().bulkCreate(info.productLadderList),
+            cms_subject_product_relation().bulkCreate(info.subjectProductRelationList),
+            pms_sku_stock()[hasId ? 'updateList' : 'bulkCreate'](info.skuStockList),
+            cms_prefrence_area_product_relation().bulkCreate(info.prefrenceAreaProductRelationList)])
 
     }
 

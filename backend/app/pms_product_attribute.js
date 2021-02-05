@@ -2,7 +2,7 @@
 
 var db = require('../models'),
     Base = require('./Base');
-var { app_product_attribute_category, app_product_attribute_value } = require('./')
+var { pms_product_attribute_category, pms_product_attribute_value } = require('./')
 
 module.exports = class pms_product_attribute extends Base {
     constructor() {
@@ -22,7 +22,7 @@ module.exports = class pms_product_attribute extends Base {
         if (!attribute.name) return;
         return Promise.all([
             this.insert(attribute),
-            app_product_attribute_category().plus_minus({
+            pms_product_attribute_category().plus_minus({
                 id: attribute.productAttributeCategoryId,
                 field: +attribute.type ? 'paramCount' : 'attributeCount'
             })
@@ -37,8 +37,8 @@ module.exports = class pms_product_attribute extends Base {
     async delAndDelRelationAndCount(id) {
         let attribute = await this.findByPk(id);
         return Promise.all([
-            app_product_attribute_value().destroy({ where: { productAttributeId: id } }),
-            app_product_attribute_category().plus_minus({
+            pms_product_attribute_value().destroy({ where: { productAttributeId: id } }),
+            pms_product_attribute_category().plus_minus({
                 id: attribute.productAttributeCategoryId,
                 field: +attribute.type ? 'paramCount' : 'attributeCount',
                 symbol: '-'

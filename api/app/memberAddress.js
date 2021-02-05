@@ -2,7 +2,7 @@ var router = require('express').Router()
     , app = require('../../backend/app')
     ;
 
-let { app_member_receive_address } = app
+let { ums_member_receive_address } = app
 
 /**
  * 
@@ -14,7 +14,7 @@ let { app_member_receive_address } = app
 router.get('/list', async (req, res) => {
     let memberId = req.query.memberId || req.operator.id;
 
-    var list = await app_member_receive_address().findList({ where: { memberId } })
+    var list = await ums_member_receive_address().findList({ where: { memberId } })
 
     res.sucess(list)
 
@@ -35,7 +35,7 @@ router.get('/list', async (req, res) => {
  */
 router.post('/createOrUpdate', async (req, res) => {
     if (!req.body.memberId) req.body.memberId = req.operator.id;
-    res.sucess(await app_member_receive_address().createOrUpdate(req.body));
+    res.sucess(await ums_member_receive_address().createOrUpdate(req.body));
 
 })
 /**
@@ -47,7 +47,7 @@ router.post('/createOrUpdate', async (req, res) => {
  */
 router.post('/delete/:id', async (req, res) => {
     let { id } = req.params;
-    res.sucess(await app_member_receive_address().destroy({ where: { id } }));
+    res.sucess(await ums_member_receive_address().destroy({ where: { id } }));
 })
 
 /**
@@ -58,7 +58,7 @@ router.post('/delete/:id', async (req, res) => {
  */
 router.get('/defaultAddress', async (req, res) => {
     let memberId = req.operator.id;
-    res.sucess(await app_member_receive_address().findOne({ where: { memberId } }));
+    res.sucess(await ums_member_receive_address().findOne({ where: { memberId } }));
 
 
 })
@@ -73,8 +73,8 @@ router.post('/setDefaultAddress/:id(\\d+)', async (req, res) => {
     let memberId = req.operator.id, { id } = req.params;
 
 
-    await app_member_receive_address().update({ defaultStatus: 0 }, { where: { memberId } });
-    await app_member_receive_address().update({ defaultStatus: 1 }, { where: { id } });
+    await ums_member_receive_address().update({ defaultStatus: 0 }, { where: { memberId } });
+    await ums_member_receive_address().update({ defaultStatus: 1 }, { where: { id } });
 
 
 

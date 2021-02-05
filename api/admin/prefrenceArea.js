@@ -1,7 +1,7 @@
 var router = require('express').Router()
     , app = require('../../backend/app')
     ;
-let { app_prefrence_area } = app
+let { cms_prefrence_area } = app
 
 
 
@@ -15,7 +15,7 @@ let { app_prefrence_area } = app
  * @apiUse baseAdmin
  */
 router.get('/listAll', async (req, res) => {
-    var list = await app_prefrence_area().findList()
+    var list = await cms_prefrence_area().findList()
 
     res.sucess(list)
 
